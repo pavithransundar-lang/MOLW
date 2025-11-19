@@ -118,3 +118,27 @@ export const Note5RmIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         </g>
     </svg>
 );
+
+export const Note10RmIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <g fill="none" fillRule="evenodd">
+            <rect width="48" height="48" fill="#F87171" rx="8"/>
+            <rect width="38" height="38" x="5" y="5" stroke="#FEF2F2" strokeWidth="2" rx="4"/>
+            <text fill="#7F1D1D" fontFamily="Arial-BoldMT, Arial" fontSize="14" fontWeight="bold" textAnchor="middle">
+                <tspan x="24" y="30">RM10</tspan>
+            </text>
+        </g>
+    </svg>
+);
+
+export const Note15RmIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <g fill="none" fillRule="evenodd">
+            <rect width="48" height="48" fill="#818CF8" rx="8"/>
+            <rect width="38" height="38" x="5" y="5" stroke="#EEF2FF" strokeWidth="2" rx="4"/>
+            <text fill="#312E81" fontFamily="Arial-BoldMT, Arial" fontSize="14" fontWeight="bold" textAnchor="middle">
+                <tspan x="24" y="30">RM15</tspan>
+            </text>
+        </g>
+    </svg>
+);

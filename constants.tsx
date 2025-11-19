@@ -1,12 +1,14 @@
 import React from 'react';
 import { Price, TokenValue } from './types';
-import { OneMinuteIcon, FiveMinuteIcon, TenMinuteIcon, Coin50SenIcon, Coin1RmIcon, Note2RmIcon, Note5RmIcon } from './components/icons';
+import { OneMinuteIcon, FiveMinuteIcon, TenMinuteIcon, Coin50SenIcon, Coin1RmIcon, Note2RmIcon, Note5RmIcon, Note10RmIcon, Note15RmIcon } from './components/icons';
 
 export const INITIAL_PRICES: Price[] = [
   { rm: 0.50, minutes: 0.5 },
   { rm: 1, minutes: 1 },
   { rm: 2, minutes: 2 },
   { rm: 5, minutes: 5 },
+  { rm: 10, minutes: 10 },
+  { rm: 15, minutes: 15 },
 ];
 
 export const EARN_AMOUNTS: number[] = [0.50, 1, 2, 5];
@@ -25,6 +27,8 @@ export const RM_ICON_MAP: { [key: number]: React.FC<React.SVGProps<SVGSVGElement
   1: Coin1RmIcon,
   2: Note2RmIcon,
   5: Note5RmIcon,
+  10: Note10RmIcon,
+  15: Note15RmIcon,
 };
 
 
