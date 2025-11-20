@@ -66,6 +66,12 @@ export const CalculatorIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) =
     </svg>
 );
 
+export const DownloadIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+  </svg>
+);
+
 export const Coin50SenIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" {...props}>
         <defs><linearGradient id="a" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stopColor="#D4D4D8"/><stop offset="100%" stopColor="#71717A"/></linearGradient><linearGradient id="b" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stopColor="#F5F5F5"/><stop offset="100%" stopColor="#A3A3A3"/></linearGradient></defs>

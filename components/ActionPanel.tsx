@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { type Transaction, type Price } from '../types';
 import { EARN_AMOUNTS, RM_ICON_MAP, MAX_CLASS_EARNINGS } from '../constants';
-import { PlusCircleIcon, CalculatorIcon, MoneyIcon } from './icons';
+import { PlusCircleIcon, CalculatorIcon, MoneyIcon, DownloadIcon } from './icons';
 import { GoogleGenAI } from '@google/genai';
 
 
@@ -62,6 +62,37 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({ priceList, onEarn, onR
     }
   };
 
+  const handleExportCSV = () => {
+    if (history.length === 0) {
+      alert("No history to export!");
+      return;
+    }
+
+    // CSV Headers
+    const headers = ['Date', 'Time', 'Type', 'Amount (RM)', 'Description'];
+    
+    // Format data
+    const csvRows = history.map(t => {
+      const date = new Date(t.timestamp);
+      const dateStr = date.toLocaleDateString();
+      const timeStr = date.toLocaleTimeString();
+      const description = t.description.replace(/,/g, ';'); // Prevent CSV errors
+      return [dateStr, timeStr, t.type, t.amount.toFixed(2), description].join(',');
+    });
+
+    // Add BOM for Excel utf-8 compatibility and join rows
+    const csvContent = '\uFEFF' + [headers.join(','), ...csvRows].join('\n');
+    
+    // Create blob and download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `wallet_history_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg space-y-6 sticky top-8">
@@ -158,7 +189,18 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({ priceList, onEarn, onR
 
       {/* Transaction History */}
       <div>
-        <h3 className="text-xl font-bold text-gray-700 mb-2">History</h3>
+        <div className="flex items-center justify-between mb-2">
+            <h3 className="text-xl font-bold text-gray-700">History</h3>
+            {history.length > 0 && (
+                <button 
+                    onClick={handleExportCSV} 
+                    className="text-gray-500 hover:text-blue-600 transition-colors p-1" 
+                    title="Export to Excel/CSV"
+                >
+                    <DownloadIcon className="h-6 w-6" />
+                </button>
+            )}
+        </div>
         <div className="bg-gray-100 p-3 rounded-lg h-48 overflow-y-auto space-y-2 border border-gray-200">
           {history.length > 0 ? history.map(t => {
             const Icon = (t.type === 'earn' || t.type === 'spend') && RM_ICON_MAP[t.amount] 
