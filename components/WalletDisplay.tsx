@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { type Price } from '../types';
-import { ClockIcon, BankIcon } from './icons';
+import { ClockIcon, BankIcon, MoneyIcon } from './icons';
 import { RM_ICON_MAP } from '../constants';
 
 interface WalletDisplayProps {
@@ -10,9 +10,10 @@ interface WalletDisplayProps {
   onSpend: (price: Price) => void;
   onSave: (amount: number) => void;
   onWithdraw: (amount: number) => void;
+  currency: string;
 }
 
-export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBalance, priceList, onSpend, onSave, onWithdraw }) => {
+export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBalance, priceList, onSpend, onSave, onWithdraw, currency }) => {
   const [saveAmount, setSaveAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
@@ -52,7 +53,7 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBala
           <div className="text-center">
             <p className="text-lg font-semibold text-green-700">You Have</p>
             <p className="text-5xl font-bold text-green-800 tracking-tight">
-              RM{balance.toFixed(2)}
+              {currency}{balance.toFixed(2)}
             </p>
           </div>
           <div className="text-center">
@@ -73,7 +74,10 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBala
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {priceList.map(price => {
-              const Icon = RM_ICON_MAP[price.rm];
+              const Icon = (currency === 'RM' && RM_ICON_MAP[price.rm]) 
+                ? RM_ICON_MAP[price.rm] 
+                : MoneyIcon;
+                
               return (
                 <button
                     key={price.rm}
@@ -83,6 +87,7 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBala
                 >
                     {Icon && <Icon className="h-10 w-10" />}
                     <span className="text-xl font-black">{price.minutes} MINS</span>
+                    <span className="text-xs font-medium opacity-75">Cost: {currency}{price.rm.toFixed(2)}</span>
                 </button>
               )
             })}
@@ -97,7 +102,7 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({ balance, savedBala
         </h3>
         <div className="bg-blue-50 p-4 rounded-xl border border-blue-200 text-center mb-4">
           <p className="font-semibold text-blue-700">Amount Saved</p>
-          <p className="text-4xl font-bold text-blue-800">RM{savedBalance.toFixed(2)}</p>
+          <p className="text-4xl font-bold text-blue-800">{currency}{savedBalance.toFixed(2)}</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
