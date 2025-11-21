@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { type Transaction, type Price, type AppSettings } from '../types';
 import { EARN_AMOUNTS, RM_ICON_MAP } from '../constants';
-import { PlusCircleIcon, CalculatorIcon, MoneyIcon, DownloadIcon, CogIcon, UploadIcon, TableIcon, ClipboardIcon } from './icons';
-import { GoogleGenAI } from '@google/genai';
+import { PlusCircleIcon, MoneyIcon, DownloadIcon, CogIcon, UploadIcon, TableIcon, ClipboardIcon } from './icons';
 
 
 interface ActionPanelProps {
@@ -31,54 +30,10 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
     onImportTransactions
 }) => {
   const [goalsVisible, setGoalsVisible] = useState(false);
-  const [calcAmount, setCalcAmount] = useState('');
-  const [calcResult, setCalcResult] = useState<string | null>(null);
-  const [isCalculating, setIsCalculating] = useState(false);
   const [showPasteModal, setShowPasteModal] = useState(false);
   const [pasteContent, setPasteContent] = useState('');
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleCalculate = async () => {
-    const amount = parseFloat(calcAmount);
-    if (isNaN(amount) || amount <= 0) {
-      setCalcResult("Please enter a valid amount.");
-      return;
-    }
-
-    setIsCalculating(true);
-    setCalcResult(null);
-
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      const priceListString = priceList.map(p => `${settings.currency}${p.rm.toFixed(2)} = ${p.minutes} minutes`).join(', ');
-      
-      const prompt = `Based on the following price list, calculate how many minutes ${settings.currency}${amount.toFixed(2)} is worth. The price list is: ${priceListString}. When items can be combined, find the combination that gives the most minutes. Respond with only the final number of minutes.`;
-
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-            systemInstruction: "You are a calculator. Your only job is to calculate minutes from currency based on a price list. Respond with a single number and nothing else. Do not add units like 'minutes'.",
-            temperature: 0,
-        }
-      });
-      
-      const textResult = response.text ? response.text.trim() : '';
-      if (textResult && !isNaN(parseFloat(textResult))) {
-        setCalcResult(`${textResult} minutes`);
-      } else {
-        setCalcResult("Couldn't calculate. Please try again.");
-      }
-
-    } catch (error) {
-      console.error("AI Calculator Error:", error);
-      setCalcResult("An error occurred.");
-    } finally {
-      setIsCalculating(false);
-    }
-  };
 
   const handleExportCSV = () => {
     if (history.length === 0) {
@@ -261,40 +216,6 @@ export const ActionPanel: React.FC<ActionPanelProps> = ({
                 Start New Class
             </button>
         </div>
-      </div>
-
-      {/* AI Calculator */}
-      <div>
-          <h3 className="text-xl font-bold text-gray-700 mb-4 flex items-center gap-2">
-              <CalculatorIcon className="h-6 w-6 text-purple-500" />
-              AI Time Calculator
-          </h3>
-          <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-              <p className="text-sm text-purple-800 mb-3">Enter an amount to see how many minutes it's worth.</p>
-              <div className="flex items-center gap-2">
-                  <input
-                      type="number"
-                      value={calcAmount}
-                      onChange={(e) => setCalcAmount(e.target.value)}
-                      placeholder="e.g., 3.50"
-                      className="w-full p-2 border border-gray-300 rounded-md shadow-inner"
-                      disabled={isCalculating}
-                      aria-label="Amount to calculate"
-                  />
-                  <button
-                      onClick={handleCalculate}
-                      disabled={isCalculating}
-                      className="bg-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-purple-600 transition-colors shadow-sm disabled:bg-purple-300 disabled:cursor-wait w-20"
-                  >
-                      {isCalculating ? '...' : 'Calc'}
-                  </button>
-              </div>
-              {calcResult && (
-                  <p className="mt-3 text-center font-semibold text-purple-900 bg-purple-100 p-2 rounded">
-                      Result: <span className="font-black">{calcResult}</span>
-                  </p>
-              )}
-          </div>
       </div>
 
       {/* Teacher Goals */}
